@@ -296,8 +296,9 @@ void XBARTcpp::_predict_gp(int n, int d, double *a, int n_y, double *a_y, int n_
 
 	// initialize X_struct
 	std::vector<double> initial_theta(1, y_mean / (double)this->params.num_trees);
-	gp_struct x_struct(new gp_struct(Xpointer, &y_std, n, Xorder_std, p_cat, d - p_cat, &initial_theta, sigma_std, this->params.num_trees));
-	gp_struct xtest_struct(new gp_struct(Xtestpointer, &y_std, n_t, Xtestorder_std, p_cat, d - p_cat, &initial_theta, sigma_std, this->params.num_trees));
+	gp_struct x_struct(Xpointer, &y_std, n, Xorder_std, p_cat, d - p_cat, &initial_theta, sigma_std, this->params.num_trees);
+	gp_struct xtest_struct(Xtestpointer, &y_std, n_t, Xtestorder_std, p_cat, d - p_cat, &initial_theta, sigma_std, this->params.num_trees);
+
 	x_struct.n_y = n;
 	xtest_struct.n_y = n_t;
 
@@ -426,13 +427,13 @@ void XBARTcpp::_fit(int n, int p, double *a, int n_y, double *a_y, size_t p_cat)
 
 	// // //State settings
 	std::vector<double> initial_theta(1, y_mean / (double)this->params.num_trees);
-	Statestate(new NormalState(Xpointer, Xorder_std, n, p, this->params.num_trees,
+	NormalState state(Xpointer, Xorder_std, n, p, this->params.num_trees,
 							   p_cat, p - p_cat, this->seed_flag, this->seed, this->params.Nmin, this->params.Ncutpoints,
 							   this->params.mtry, Xpointer, this->params.num_sweeps, this->params.sample_weights,
-							   &y_std, 1.0, this->params.max_depth, y_mean, this->params.burnin, this->model->dim_residual, this->params.nthread, this->params.parallel)); // last input is nthread, need update
+							   &y_std, 1.0, this->params.max_depth, y_mean, this->params.burnin, this->model->dim_residual, this->params.nthread, this->params.parallel); // last input is nthread, need update
 
 	// initialize X_struct
-	X_struct &x_struct(new X_struct(Xpointer, &y_std, n, Xorder_std, p_cat, p - p_cat, &initial_theta, this->params.num_trees));
+	X_struct x_struct(Xpointer, &y_std, n, Xorder_std, p_cat, p - p_cat, &initial_theta, this->params.num_trees);
 
 	this->resid.resize(n * this->params.num_sweeps * this->params.num_trees);
 
