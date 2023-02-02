@@ -22,13 +22,6 @@ note = 'Time efficiency experiments on update_gp branch with test scale 1.5, the
 # Define regression algorithm (for all other methods)
 ######################################
 
-
-# def random_forest(X,Y,X1):
-#     regr = RandomForestRegressor()
-#     regr.fit(X, Y)
-#     return regr.predict(X1)
-
-
 def leastsq_ridge(X,Y,X1,ridge_mult=0.001):
     lam = ridge_mult * np.linalg.svd(X,compute_uv=False).max()**2
     betahat = np.linalg.solve(\
@@ -44,8 +37,6 @@ def random_forest(X,Y,X1,ntree=20):
 def neural_net(X,Y,X1):
     nnet = MLPRegressor(solver='lbfgs',activation='logistic').fit(X,Y)
     return nnet.predict(X1)
-
-
 
 def check_out_of_range(x1, x_min, x_max):
     for i in range(len(x1)):
@@ -102,7 +93,7 @@ def compute_PIs(X,Y,X1,alpha,fit_muh_fun):
     times = {}
     
     ###############################
-    # xbart gaussian process
+    # XBART-GP
     ###############################
     start = time.time()
     num_trees = 20
@@ -134,20 +125,14 @@ def compute_PIs(X,Y,X1,alpha,fit_muh_fun):
     times['XBART-GP'] = time.time() - start - (times['XBART'] - xbart_train)
 
     ###############################
-    # jackknife+ on xbart (reduce number of sweeps make sense?)
+    # Jackknife+ XBART
     ###############################
 
     start = time.time()
     xbart = XBART(num_trees = num_trees, num_sweeps = num_sweeps + burnin, burnin = burnin, tau = tau, sampling_tau = True)
-    # xbart.fit(X,Y,0)
-    # muh_vals = xbart.predict(np.r_[X,X1], return_mean = True)
-    # resids_naive = np.abs(Y-muh_vals[:n])
-    # muh_vals_testpoint = muh_vals[n:]
     resids_LOO_xbart = np.zeros(n)
     muh_LOO_vals_testpoint_xbart = np.zeros((n,n1))
     for i in range(n):
-        # muh_vals_LOO = fit_muh_fun(np.delete(X,i,0),np.delete(Y,i),\
-        #                            np.r_[X[i].reshape((1,-1)),X1])
         xbart.fit(np.delete(X,i,0),np.delete(Y,i), 0)
         muh_vals_LOO = xbart.predict(np.r_[X[i].reshape((1,-1)),X1])
         resids_LOO_xbart[i] = np.abs(Y[i] - muh_vals_LOO[0])
@@ -156,7 +141,7 @@ def compute_PIs(X,Y,X1,alpha,fit_muh_fun):
     times['jackknife+ XBART'] = time.time() - start
     
     ###############################
-    # CV+ on xbart
+    # CV+ XBART
     ###############################
     
     start = time.time()
@@ -178,7 +163,7 @@ def compute_PIs(X,Y,X1,alpha,fit_muh_fun):
     times['CV+ XBART'] = time.time() - start
 
      ###############################
-    # Jackknife+ on fit_muh_fun (rf)
+    # Jackknife+ RF
     ###############################
     
     start = time.time()
@@ -194,7 +179,7 @@ def compute_PIs(X,Y,X1,alpha,fit_muh_fun):
 
 
     ###############################
-    # CV+
+    # CV+ RF
     ###############################
 
     start = time.time()
@@ -251,7 +236,6 @@ ntrial = 10
 alpha = 0.1
 test_scale = 1.5
 d = 10
-# dgp_list = ['linear', 'single_index', 'trig_poly', 'max']
 dgp_list = ['linear']  
 method_names = ['XBART','XBART-GP','jackknife+ XBART','jackknife+ RF','CV+ XBART', 'CV+ RF']
 

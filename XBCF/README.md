@@ -2,22 +2,21 @@
 
 ## About
 
-This package implements the Accelerated Bayesian Causal Forests approach for conditional average treatment effect estimation; the manuscript is available [here](https://math.la.asu.edu/~prhahn/XBCF.pdf). This approach builds on the methodology behind Bayesian Causal Forests outlined in [Hahn et al.](https://projecteuclid.org/euclid.ba/1580461461) (2020) and incorporates several improvements to Bayesian Additive Regression Trees implemented by [He et al.](http://proceedings.mlr.press/v89/he19a.html) (2019).
+This package implements the local Gaussian process extrapolation for XBCF. The manuscript is available [here](https://arxiv.org/abs/2204.10963). This approach builds on the methodology behind Accelerated Bayesian Causal Forests (XBCF) outlined in [Krantsevich et al.](https://math.la.asu.edu/~prhahn/XBCF.pdf).
 
-This package is based on the source code of the [XBART](https://github.com/JingyuHe/XBART) package and was originally developed as a branch of that repository.
+This package is based on the source code of the [XBCF](https://github.com/socket778/XBCF) package and was originally developed as a branch of that repository.
+
 
 ## Installation
 
-
-### R
-To install the package, run from the R console:
-
+'```
+cd tests/
+bash test_r.sh
 ```
+
+An up-to-date version of the package can be installed in R console:
+```R
 library(devtools)
-
-install_github("socket778/XBCF")
+install_github("socket778/XBCF", branch = "xbcf-gp")
 ```
 
-### Python
-
-To install XBCF from PyPI use `pip install xbcausalforest`

@@ -30,12 +30,6 @@ def leastsq_minL2(X,Y,X1,tol=TOL):
     betahat = (vX[:rX].T/dX[:rX]).dot(uX[:,:rX].T.dot(Y))
     return X1.dot(betahat)
 
-# def random_forest(X,Y,X1):
-#     regr = RandomForestRegressor()
-#     regr.fit(X, Y)
-#     return regr.predict(X1)
-
-
 def leastsq_ridge(X,Y,X1,ridge_mult=0.001):
     lam = ridge_mult * np.linalg.svd(X,compute_uv=False).max()**2
     betahat = np.linalg.solve(\
@@ -51,8 +45,6 @@ def random_forest(X,Y,X1,ntree=20):
 def neural_net(X,Y,X1):
     nnet = MLPRegressor(solver='lbfgs',activation='logistic').fit(X,Y)
     return nnet.predict(X1)
-
-
 
 def check_out_of_range(x1, x_min, x_max):
     for i in range(len(x1)):
@@ -103,7 +95,7 @@ def compute_PIs(X,Y,X1,alpha,fit_muh_fun):
     n1 = X1.shape[0]
     
     ###############################
-    # xbart gaussian process
+    # XBART-GP
     ###############################
     
     num_trees = 20
@@ -133,7 +125,7 @@ def compute_PIs(X,Y,X1,alpha,fit_muh_fun):
     xbart_PI_gp.rename(columns = {0: 'lower', 1: 'upper', 2:'pred'}, inplace = True)
 
     ###############################
-    # jackknife+ on xbart (reduce number of sweeps make sense?)
+    # Jackknife+ XBART
     ###############################
 
     # muh_vals = fit_muh_fun(X,Y,np.r_[X,X1])
@@ -154,7 +146,7 @@ def compute_PIs(X,Y,X1,alpha,fit_muh_fun):
     ind_q = (np.ceil((1-alpha)*(n+1))).astype(int)
     
     ###############################
-    # CV+ on xbart
+    # CV+ XBART
     ###############################
 
     K = 10
@@ -175,7 +167,7 @@ def compute_PIs(X,Y,X1,alpha,fit_muh_fun):
 
 
      ###############################
-    # Jackknife+ on fit_muh_fun (rf)
+    # Jackknife+ RF
     ###############################
     
     # muh_vals = fit_muh_fun(X,Y,np.r_[X,X1])
@@ -192,7 +184,7 @@ def compute_PIs(X,Y,X1,alpha,fit_muh_fun):
 
 
     ###############################
-    # CV+
+    # CV+ RF
     ###############################
 
     K = 10
@@ -255,7 +247,6 @@ dgp_list = ['linear', 'single_index', 'trig_poly', 'max']
 
 method_names = ['XBART','XBART-GP','jackknife+ XBART','jackknife+ RF','CV+ XBART', 'CV+ RF']
 
-# results = pd.DataFrame(columns = ['itrial','dgp','method','coverage','width','coverage_in','width_in','coverage_out','width_out','num_outliers'])
 results = pd.DataFrame(columns = ['itrial','dgp','method','rmse','coverage','width','coverage_type', 'size'])
 
 filename = 'results/xbart_gp_sim.csv'
@@ -287,10 +278,7 @@ for dgp in dgp_list:
         X_max = np.apply_along_axis(lambda x: x.max(), 0, X)
         outliers = np.apply_along_axis(check_out_of_range, 1, X1, x_min = X_min, x_max = X_max)
         num_outliers = sum(outliers)
-        
-        # X1_out = (X1[outliers,:])[:100,:]
-        # X1_in = (X1[np.invert(outliers),:])[:100,:]
-        # X1 = np.r_[X1_in,X1_out]
+
         Y1 = generate_data(X1, dgp) + np.random.normal(size=n1)
 
         PIs = compute_PIs(X,Y,X1,alpha,random_forest)
@@ -311,10 +299,6 @@ for dgp in dgp_list:
                 coverage_out = ((PIs[method]['lower'] <= Y1)&(PIs[method]['upper'] >= Y1))[outliers].mean()
                 width_out = (PIs[method]['upper'] - PIs[method]['lower'])[outliers].mean()
 
-                # results.loc[len(results)]=[itrial,d,method,coverage,width,coverage_in,width_in,coverage_out,width_out,num_outliers]
-                # writer.writerow([itrial,d,method,coverage,width,coverage_in,width_in,coverage_out,width_out,num_outliers])
                 writer.writerow([itrial, dgp, method, rmse, coverage, width, 'Overall', n1])
                 writer.writerow([itrial, dgp, method, rmse_in, coverage_in, width_in, 'Interior',n1 - num_outliers])
                 writer.writerow([itrial, dgp, method, rmse_out, coverage_out, width_out, 'Exterior', num_outliers])
-            
-# results.to_csv('jackknife_simulation_results.csv',index=False)

@@ -1,49 +1,23 @@
 # XBART
 
-XBART -- Accelerated Bayesian Additive Regression Trees is an optimized machine learning library that provides efficient and accurate predictions. It implements a tree ensemble model inspired by the Bayesian Additive Regression Trees. XBART discards the slow random walk Metropolis-Hastings algorithms implemented by BART, rather fit the trees recursively and maintains the regularization from BART model. It can solve many data analytics problem efficiently and accurately. Furthermore it works for both regression and classification tasks, provides package in R and python, and can take advantage of parallel computing.
+## About
 
-## Warm-start BART
+This package implements the local Gaussian process extrapolation for XBART. The manuscript is available [here](https://arxiv.org/abs/2204.10963). This approach builds on the methodology behind Accelerated Bayesian Additive Regression Trees (XBART) outlined in [He et al.](http://jingyuhe.com/files/xbart.pdf) (2019) and [He et al.](http://jingyuhe.com/files/scalabletrees.pdf) (2021).
 
-The BART Markov chain Monte Carlo algorithm can initialize at XBART fitted trees (rather than the default root nodes) to speed up convergence. See the demo examples under /tests folder for more details.
-
-Currently, the warm-start BART relies on a customerized version of BART package [Github Link](https://github.com/jingyuhe/BART). We are working with the developers of BART pacakage to bring this feature to the original package.
-
-## Reference
-
-He, Jingyu, Saar Yalov, and P. Richard Hahn. "XBART: Accelerated Bayesian additive regression trees." *The 22nd International Conference on Artificial Intelligence and Statistics*. PMLR, 2019. [Link](http://jingyuhe.com/files/xbart.pdf)
-
-He, Jingyu, and P. Richard Hahn. "Stochastic tree ensembles for regularized nonlinear regression." *Journal of the American Statistical Association* (2021): 1-20. [Link](http://jingyuhe.com/files/scalabletrees.pdf)
-
-
-
-## Extension
-
-The XBCF package implements the Bayesian causal forest under XBART framework. Details can be found [here](https://github.com/socket778/XBCF).
-
-
-
-## Contributors
-
-Jingyu He, Saar Yalov, Meijia Wang, Nikolay Krantsevich, Lee Reeves and P. Richard Hahn
-
-
+This package is based on the source code of the [XBART](https://github.com/JingyuHe/XBART) package and was originally developed as a branch of that repository.
 
 ## Install Instruction
 
-It can be installed from GitHub directly using devtools package in R. The CRAN version will be submitted soon.
-
+In terminal, type
+```
+cd tests/
+bash test_r.sh
+```
+An up-to-date version of the package can be installed in R console:
 ```R
 library(devtools)
 install_github("JingyuHe/XBART")
 ```
-
-You may also install the customerized BART package to try the warm-start feature.
-```R
-library(devtools)
-install_github("JingyuHe/BART")
-```
-
-
 
 #### Trouble shooting
 
