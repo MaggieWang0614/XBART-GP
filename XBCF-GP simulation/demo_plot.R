@@ -113,45 +113,76 @@ RO_cor[which((ps %in% ps_addRO) == 1)] <- 1
 
 ce_bartspl <- bartspl(datall = datall_cor, RO = RO_cor)
 
+# demo ggplot ---------------------------------------------------------------
+library(ggplot2)
+df <- data.frame(X = x, True = tau, Group = as.factor(z), XBCF)
+ggplot(data = df) +
+  geom_point(aes(x = X, y = True, color = Group)) +
+  scale_color_manual(values = c(""))
+
+df <- data.frame(X = x, True = tau, XBCF = ce_xbcf$ite, Upper = ce_xbcf$itu, Lower = ce_xbcf$itl)
+
 # Demo plot ---------------------------------------------------------------
 cex_size <- 1.2
 lab_size <- 2
 tick_size <- 2
-line_size <- 1.5
+point_size <- 1
+line_size <- 2
+color <- c("#bd0026", "#fd8d3c", rgb(254/255, 178/255, 76/255, 0.5))
+
+# Ground Truth
+pdf(file = "demo_true.pdf", width = 6, height = 6)
+par(mar = c(5, 6, 4, 1) + .1)
+plot(x, tau,
+     col = color[4 - z*2 - 1], ylim = range(tau, ce_xbcf$itu, ce_xbcf$itl),
+     ylab = "Treatment Effect", xlab = "", cex.lab = lab_size, cex.axis = tick_size, cex = 1, pch = 20
+)
+abline(v = v1, col = 1, lty = 3, cex = 2)
+abline(v = v2, col = 1, lty = 3, cex = 2)
+legend("topleft",
+       legend = c("Treated", "Control"), col = color[c(3, 1)],
+       pch = c(20, 20), cex = cex_size, font_size
+)
+dev.off()
 
 # XBCF
 pdf(file = "xbcf_demo.pdf", width = 6, height = 6)
 par(mar = c(5, 6, 4, 1) + .1)
 plot(x, tau,
-  col = z + 1, ylim = range(tau, ce_xbcf$itu, ce_xbcf$itl),
-  ylab = "Treatment Effect", xlab = "", cex.lab = lab_size, cex.axis = tick_size, cex = line_size, pch = 20
+  col = color[1], ylim = range(tau, ce_xbcf$itu, ce_xbcf$itl),
+  ylab = "Treatment Effect", xlab = "", cex.lab = lab_size, cex.axis = tick_size, lty = 1, lwd = 0.5, pch = 0, cex = 0.3
 )
+polygon(c(rev(x), x), c(rev(ce_xbcf$itu), ce_xbcf$itl), border = NA, col = color[3])
 abline(v = v1, col = 1, lty = 3, cex = 2)
 abline(v = v2, col = 1, lty = 3, cex = 2)
-lines(x, ce_xbcf$ite, col = 4, lwd = 2, cex = line_size)
-lines(x, ce_xbcf$itu, col = 3, lwd = 2, cex = line_size)
-lines(x, ce_xbcf$itl, col = 3, lwd = 2, cex = line_size)
+lines(x, tau, col = color[1], lwd = 2, cex = line_size)
+lines(x, ce_xbcf$ite, col = color[2], lwd = 2, cex = line_size)
+lines(x, ce_xbcf$itu, col = color[3], lwd = 2, lty = 2, cex = line_size)
+lines(x, ce_xbcf$itl, col = color[3], lwd = 2, lty = 2, cex = line_size)
 legend("topleft",
-  legend = c("Treated", "Control", "XBCF", "95% CI"), col = c(2, 1, 4, 3),
-  lty = c(NA, NA, 1, 1), pch = c(20, 20, NA, NA), cex = cex_size, font_size
+  legend = c("True", "XBCF", "95% CI"), col = color,
+  lty = c(1, 1, 1), pch = c(NA, NA, NA), cex = cex_size, font_size
 )
 dev.off()
+
 
 # XBCF-GP
 pdf(file = "xbcf_gp_demo.pdf", width = 6, height = 6)
 par(mar = c(5, 6, 4, 1) + .1)
 plot(x, tau,
-  col = z + 1, ylim = range(tau, ce_xbcf_gp$ite, ce_xbcf_gp$itl),
-  ylab = "Treatment Effect", xlab = "", cex.lab = lab_size, cex.axis = tick_size, cex = line_size, pch = 20
+  col = color[1], ylim = range(tau, ce_xbcf_gp$ite, ce_xbcf_gp$itl),
+  ylab = "Treatment Effect", xlab = "", cex.lab = lab_size, cex.axis = tick_size, lty = 1, lwd = 0.5, pch = 0, cex = 0.3
 )
+polygon(c(rev(x), x), c(rev(ce_xbcf_gp$itu), ce_xbcf_gp$itl), border = NA, col = color[3])
 abline(v = v1, col = 1, lty = 3, cex = 2)
 abline(v = v2, col = 1, lty = 3, cex = 2)
-lines(x, ce_xbcf_gp$ite, col = 4, lwd = 2, cex = line_size)
-lines(x, ce_xbcf_gp$itu, col = 3, lwd = 2, cex = line_size)
-lines(x, ce_xbcf_gp$itl, col = 3, lwd = 2, cex = line_size)
+lines(x, tau, col = color[1], lwd = 2, cex = line_size)
+lines(x, ce_xbcf_gp$ite, col = color[2], lwd = 2, cex = line_size)
+lines(x, ce_xbcf_gp$itu, col = color[3], lwd = 2, lty = 2, cex = line_size)
+lines(x, ce_xbcf_gp$itl, col = color[3], lwd = 2, lty = 2, cex = line_size)
 legend("topleft",
-  legend = c("Treated", "Control", "XBCF-GP", "95% CI"), col = c(2, 1, 4, 3),
-  lty = c(NA, NA, 1, 1), pch = c(20, 20, NA, NA), cex = cex_size
+  legend = c("True", "XBCF-GP", "95% CI"), col = color,
+  lty = c(1, 1, 1), pch = c(NA, NA, NA), cex = cex_size
 )
 dev.off()
 
@@ -159,17 +190,19 @@ dev.off()
 pdf(file = "sbart_demo.pdf", width = 6, height = 6)
 par(mar = c(5, 6, 4, 1) + .1)
 plot(x, tau,
-  col = z + 1, ylim = range(tau, ce_sbart$itu, ce_sbart$itl),
-  ylab = "Treatment Effect", xlab = "", cex.lab = lab_size, cex.axis = tick_size, cex = line_size, pch = 20
+  col = color[1], ylim = range(tau, ce_sbart$itu, ce_sbart$itl),
+  ylab = "Treatment Effect", xlab = "", cex.lab = lab_size, cex.axis = tick_size, lty = 1, lwd = 0.5, pch = 0, cex = 0.3
 )
+polygon(c(rev(x), x), c(rev(ce_sbart$itu), ce_sbart$itl), border = NA, col = color[3])
 abline(v = v1, col = 1, lty = 3, cex = 2)
 abline(v = v2, col = 1, lty = 3, cex = 2)
-lines(x, ce_sbart$ite, col = 4, lwd = 2, cex = line_size)
-lines(x, ce_sbart$itu, col = 3, lwd = 2, cex = line_size)
-lines(x, ce_sbart$itl, col = 3, lwd = 2, cex = line_size)
+lines(x, tau, col = color[1], lwd = 2, cex = line_size)
+lines(x, ce_sbart$ite, col = color[2], lwd = 2, cex = line_size)
+lines(x, ce_sbart$itu, col = color[3], lwd = 2, lty = 2, cex = line_size)
+lines(x, ce_sbart$itl, col = color[3], lwd = 2, lty = 2, cex = line_size)
 legend("topleft",
-  legend = c("Treated", "Control", "SBART", "95% CI"), col = c(2, 1, 4, 3),
-  lty = c(NA, NA, 1, 1), pch = c(20, 20, NA, NA), cex = cex_size
+  legend = c("True", "SBART", "95% CI"), col = color,
+  lty = c(1, 1, 1), pch = c(NA, NA, NA), cex = cex_size
 )
 dev.off()
 
@@ -177,17 +210,19 @@ dev.off()
 pdf(file = "ubart_demo.pdf", width = 6, height = 6)
 par(mar = c(5, 6, 4, 1) + .1)
 plot(x, tau,
-  col = z + 1, ylim = range(tau, ce_ubart$itu, ce_ubart$itl),
-  ylab = "Treatment Effect", xlab = "", cex.lab = lab_size, cex.axis = tick_size, cex = line_size, pch = 20
+  col = color[1], ylim = range(tau, ce_ubart$itu, ce_ubart$itl),
+  ylab = "Treatment Effect", xlab = "", cex.lab = lab_size, cex.axis = tick_size, lty = 1, lwd = 0.5, pch = 0, cex = 0.3
 )
+polygon(c(rev(x), x), c(rev(ce_ubart$itu), ce_ubart$itl), border = NA, col = color[3])
 abline(v = v1, col = 1, lty = 3, cex = 2)
 abline(v = v2, col = 1, lty = 3, cex = 2)
-points(x, ce_ubart$ite, col = 4, pch = 20, cex = 0.7)
-points(x, ce_ubart$itu, col = 3, pch = 20, cex = 0.7)
-points(x, ce_ubart$itl, col = 3, pch = 20, cex = 0.7)
+lines(x, ce_ubart$ite, col = color[2], lwd = 2, cex = line_size)
+lines(x, ce_ubart$itu, col = color[3], lwd = 2, lty = 2, cex = line_size)
+lines(x, ce_ubart$itl, col = color[3], lwd = 2, lty = 2, cex = line_size)
+lines(x, tau, col = color[1], lwd = 2, cex = line_size)
 legend("topleft",
-  legend = c("Treated", "Control", "UBART", "95% CI"), col = c(2, 1, 4, 3),
-  pch = c(20, 20, 20, 20), cex = cex_size
+  legend = c("True", "UBART", "95% CI"), col = color,
+  lty = c(1, 1, 1), pch = c(NA, NA, NA), cex = cex_size
 )
 dev.off()
 
@@ -195,16 +230,18 @@ dev.off()
 pdf(file = "bartspl_demo.pdf", width = 6, height = 6)
 par(mar = c(5, 6, 4, 1) + .1)
 plot(x, tau,
-  col = z + 1, ylim = range(tau, ce_bartspl$itu, ce_bartspl$itl),
-  ylab = "Treatment Effect", xlab = "", cex.lab = lab_size, cex.axis = tick_size, cex = line_size, pch = 20
+     col = color[1], ylim = range(tau, ce_bartspl$itu, ce_bartspl$itl),
+     ylab = "Treatment Effect", xlab = "", cex.lab = lab_size, cex.axis = tick_size, lty = 1, lwd = 0.5, pch = 0, cex = 0.3
 )
+polygon(c(rev(x), x), c(rev(ce_bartspl$itu), ce_bartspl$itl), border = NA, col = color[3])
 abline(v = v1, col = 1, lty = 3, cex = 2)
 abline(v = v2, col = 1, lty = 3, cex = 2)
-points(x, ce_bartspl$ite, col = 4, pch = 20)
-points(x, ce_bartspl$itu, col = 3, pch = 20)
-points(x, ce_bartspl$itl, col = 3, pch = 20)
+lines(x, ce_bartspl$ite, col = color[2], lwd = 2, cex = line_size)
+lines(x, ce_bartspl$itu, col = color[3], lwd = 2, lty = 2, cex = line_size)
+lines(x, ce_bartspl$itl, col = color[3], lwd = 2, lty = 2, cex = line_size)
+lines(x, tau, col = color[1], lwd = 2, cex = line_size)
 legend("topleft",
-  legend = c("Treated", "Control", "BART+SPL", "95% CI"), col = c(2, 1, 4, 3),
-  pch = c(20, 20, 20, 20), cex = cex_size
+       legend = c("True", "BART+SPL", "95% CI"), col = color,
+       lty = c(1, 1, 1), pch = c(NA, NA, NA), cex = cex_size
 )
 dev.off()

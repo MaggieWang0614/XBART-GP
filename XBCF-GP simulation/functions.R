@@ -32,7 +32,7 @@ bartalone <- function(xtr, ytr, xte) {
   ce_bart$itl <- apply(cate, 1, quantile, probs = 0.025)
 
   ## average causal effects ##
-  ppd_ice <- matrix(NA, nrow = nrow(ppd_test), ncol = length(ytr))
+  ppd_ice <- matrix(NA, nrow = nrow(ppd_test), ncol = ncol(ppd_test))
   for (j in 1:length(ytr)) {
     if (xtr[j, 1] == 1) {
       ppd_ice[j, ] <- ytr[j] - ppd_test[j, ]
@@ -41,7 +41,7 @@ bartalone <- function(xtr, ytr, xte) {
     }
   }
   ## get ACE posterior using the Bayesian bootstrap ##
-  ce_bart$ate <- apply(ppd_ice, 1, aceBB)
+  ce_bart$ate <- apply(t(ppd_ice), 1, aceBB)
 
   t <- proc.time() - t
   ce_bart$time <- t
