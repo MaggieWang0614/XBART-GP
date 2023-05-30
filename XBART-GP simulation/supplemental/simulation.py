@@ -228,7 +228,7 @@ method_names = ['XBART','XBART-GP','jackknife+ XBART','jackknife+ XBART-GP','CV+
 
 results = pd.DataFrame(columns = ['itrial','dgp','method','rmse','coverage','width','coverage_type', 'size'])
 
-filename = 'results/xbart_gp_sim.csv'
+filename = 'xbart_gp_sim.csv'
 if not exists(filename):
     print("create csv file: "+filename)
     with open(filename, 'w',encoding='UTF8') as f:
