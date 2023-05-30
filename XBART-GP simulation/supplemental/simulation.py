@@ -9,7 +9,7 @@ from os.path import exists
 import csv
 
 ######################################
-# Compare xbart, xbart-gp, jackknife+ with xbart & rf, CV+ with xbart & rf.
+# Compare xbart, xbart-gp, jackknife+ with XBART & XBART-GP, CV+ with xbart & rf.
 # test set: N(0, 2) with 100 interior points and 100 exterior points
 ######################################
 note = 'simulation studies on update_gp branch, theta = 0.1, tau = var(y)/L'
@@ -224,7 +224,7 @@ test_scale = 1.5
 d = 10
 dgp_list = ['linear', 'single_index', 'trig_poly', 'max']
 
-method_names = ['XBART','XBART-GP','jackknife+ XBART','jackknife+ RF','CV+ XBART', 'CV+ RF']
+method_names = ['XBART','XBART-GP','jackknife+ XBART','jackknife+ XBART-GP','CV+ XBART', 'CV+ XBART_GP']
 
 results = pd.DataFrame(columns = ['itrial','dgp','method','rmse','coverage','width','coverage_type', 'size'])
 
