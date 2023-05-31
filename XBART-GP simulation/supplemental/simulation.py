@@ -202,7 +202,7 @@ def compute_PIs(X,Y,X1,alpha,fit_muh_fun):
                         np.sort(muh_LKO_vals_testpoint_xbart.T + resids_LKO_xbart,axis=1).T[ind_Kq-1],
                          muh_LKO_vals_testpoint_xbart.T.mean(axis = 1)],\
                            columns = ['lower','upper', 'pred']),\
-                'CV+ XBAR-GP' : pd.DataFrame(\
+                'CV+ XBART-GP' : pd.DataFrame(\
                     np.c_[np.sort(muh_LKO_vals_testpoint_xbart_gp.T - resids_LKO_xbart_gp,axis=1).T[-ind_Kq], \
                         np.sort(muh_LKO_vals_testpoint_xbart_gp.T + resids_LKO_xbart_gp,axis=1).T[ind_Kq-1],
                          muh_LKO_vals_testpoint_xbart_gp.T.mean(axis = 1)],\
