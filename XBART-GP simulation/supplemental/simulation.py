@@ -224,7 +224,7 @@ test_scale = 1.5
 d = 10
 dgp_list = ['linear', 'single_index', 'trig_poly', 'max']
 
-method_names = ['XBART','XBART-GP','jackknife+ XBART','jackknife+ XBART-GP','CV+ XBART', 'CV+ XBART_GP']
+method_names = ['XBART','XBART-GP','jackknife+ XBART','jackknife+ XBART-GP','CV+ XBART', 'CV+ XBART-GP']
 
 results = pd.DataFrame(columns = ['itrial','dgp','method','rmse','coverage','width','coverage_type', 'size'])
 
