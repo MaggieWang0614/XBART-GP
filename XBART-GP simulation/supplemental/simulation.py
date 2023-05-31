@@ -145,7 +145,7 @@ def compute_PIs(X,Y,X1,alpha,fit_muh_fun):
         resids_LOO_xbart[i] = np.abs(Y[i] - muh_vals_LOO[0])
         muh_LOO_vals_testpoint_xbart[i] = muh_vals_LOO[1:]
 
-        muh_vals_LOO_gp = xbart.predict_gp(X, Y, np.r_[X[i].reshape((1,-1)),X1], p_cat = 0, theta = theta, tau = np.var(Y) / num_trees, return_mean=False)
+        muh_vals_LOO_gp = xbart.predict_gp(X, Y, np.r_[X[i].reshape((1,-1)),X1], p_cat = 0, theta = theta, tau = np.var(Y) / num_trees, return_mean=True)
         resids_LOO_xbart_gp[i] = np.abs(Y[i] - muh_vals_LOO_gp[0])
         muh_LOO_vals_testpoint_xbart_gp[i] = muh_vals_LOO_gp[1:]
     
@@ -172,7 +172,7 @@ def compute_PIs(X,Y,X1,alpha,fit_muh_fun):
         for inner_K in range(n_K):
             muh_LKO_vals_testpoint_xbart[inds_to_delete[inner_K]] = muh_vals_LKO[n_K:]
 
-        muh_vals_LKO_gp = xbart.predict_gp(X, Y, np.r_[X[inds_to_delete],X1], p_cat = 0, theta = theta, tau = np.var(Y) / num_trees, return_mean=False)
+        muh_vals_LKO_gp = xbart.predict_gp(X, Y, np.r_[X[inds_to_delete],X1], p_cat = 0, theta = theta, tau = np.var(Y) / num_trees, return_mean=True)
         resids_LKO_xbart_gp[inds_to_delete] = np.abs(Y[inds_to_delete] - muh_vals_LKO_gp[:n_K])
         for inner_K in range(n_K):
             muh_LKO_vals_testpoint_xbart_gp[inds_to_delete[inner_K]] = muh_vals_LKO_gp[n_K:]
