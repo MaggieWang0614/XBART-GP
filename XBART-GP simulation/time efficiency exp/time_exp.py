@@ -16,7 +16,7 @@ np.random.seed(seed)
 # Time efficiency experiments on interior and exterior points
 # with test scale 1.5
 ######################################  
-note = 'Time efficiency experiments on update_gp branch with test scale 1.5, theta = 0.1'
+note = 'Time efficiency experiments on update_gp branch with test scale 1.5, theta = sqrt(10)'
 
 ######################################
 # Define regression algorithm (for all other methods)
@@ -100,7 +100,7 @@ def compute_PIs(X,Y,X1,alpha,fit_muh_fun):
     num_sweeps = 100
     burnin = 20
     tau = np.var(Y) / num_trees
-    theta = 0.1
+    theta = sqrt(10)
     n_min = 20
     xbart = XBART(num_trees = num_trees, num_sweeps = num_sweeps + burnin, burnin = burnin, tau = tau, sampling_tau = True, n_min = n_min)
     xbart.fit(X,Y,0)

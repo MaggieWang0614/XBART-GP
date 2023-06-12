@@ -12,7 +12,7 @@ import csv
 # Compare xbart, xbart-gp, jackknife+ with XBART & XBART-GP, CV+ with xbart & rf.
 # test set: N(0, 2) with 100 interior points and 100 exterior points
 ######################################
-note = 'simulation studies on update_gp branch, theta = 0.1, tau = var(y)/L'
+note = 'simulation studies on update_gp branch, theta = sqrt(10), tau = var(y)/L'
 
 seed = 98765
 np.random.seed(seed)
@@ -102,7 +102,7 @@ def compute_PIs(X,Y,X1,alpha,fit_muh_fun):
     num_sweeps = 100
     burnin = 20
     tau = np.var(Y) / num_trees
-    theta = 0.1
+    theta = sqrt(10)
     n_min = 20
     xbart = XBART(num_trees = num_trees, num_sweeps = num_sweeps + burnin, burnin = burnin, tau = tau, sampling_tau = True, n_min = n_min)
     xbart.fit(X,Y,0)

@@ -185,7 +185,7 @@ for (i in 1:length(params)) {
     t <- proc.time()
     tau_gp <- mean(xbcf.fit$sigma1_draws)^2 / xbcf.fit$model_params$num_trees_trt
     xbcf.gp <- predictGP(xbcf.fit, datall_cor$y, datall_cor$z, as.matrix(x), as.matrix(x), as.matrix(x), as.matrix(x),
-      pihat_tr = datall_cor$ps, pihat_te = datall_cor$ps, theta = 0.1, tau = tau_gp, verbose = FALSE
+      pihat_tr = datall_cor$ps, pihat_te = datall_cor$ps, theta = sqrt(10), tau = tau_gp, verbose = FALSE
     )
     ce_xbcf_gp <- list()
 
