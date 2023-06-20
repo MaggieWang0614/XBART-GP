@@ -56,7 +56,7 @@ ps_addRO <- temp1[which(order_RO_cor[1:ll_cor] == 0)]
 RO_cor[which((ps %in% ps_addRO) == 1)] <- 1
 
 #######################
-## 1. XBCF ##
+## 1. XBCF ##c
 #######################
 xbcf.fit <- XBCF(y, z, as.matrix(x), as.matrix(x),
   n_trees_mod = 20, num_sweeps = 100,
