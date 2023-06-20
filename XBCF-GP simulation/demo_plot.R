@@ -113,15 +113,6 @@ RO_cor[which((ps %in% ps_addRO) == 1)] <- 1
 
 ce_bartspl <- bartspl(datall = datall_cor, RO = RO_cor)
 
-# demo ggplot ---------------------------------------------------------------
-library(ggplot2)
-df <- data.frame(X = x, True = tau, Group = as.factor(z), XBCF)
-ggplot(data = df) +
-  geom_point(aes(x = X, y = True, color = Group)) +
-  scale_color_manual(values = c(""))
-
-df <- data.frame(X = x, True = tau, XBCF = ce_xbcf$ite, Upper = ce_xbcf$itu, Lower = ce_xbcf$itl)
-
 # Demo plot ---------------------------------------------------------------
 cex_size <- 1.2
 lab_size <- 2
