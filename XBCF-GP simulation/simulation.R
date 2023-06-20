@@ -6,7 +6,7 @@ n <- 500
 simnum <- 100 # seed
 a <- 0.1 # a parameter in non-overlap definition#
 b <- 7 # b parameter in non-overlap definition#
-reps <- 20
+reps <- 10
 
 # Experiment Set Up --------------------------------------------------------------
 library(Hmisc)
